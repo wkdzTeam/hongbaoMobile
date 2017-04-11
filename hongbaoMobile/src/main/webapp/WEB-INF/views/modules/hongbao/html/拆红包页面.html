@@ -1,0 +1,99 @@
+
+<!doctype html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link href="style1.css?ver=1.326" rel="stylesheet" type="text/css">
+<script>    var webinfo = { "uid": 161648, "username": "161648", "webname": "拼.手.气", "wxid": "wein", "wxname": "123123", "qrcode_kefu": "qqkefu.jpg", "qrcode_daili": "dailism.jpg", "ggdes": "", "showgg": "false" }</script>
+<script src="jquery.js"></script>
+<script src="fontscroll.js?ver=1.12"></script>
+<script src="module.js?ver=1.12"></script>
+</head>
+<body>
+<header></header><div class="kaijiang">
+	<div class="kaijiang-title">本轮开出以下红包</div>
+	<div class="kaijiang-list"><ul></ul></div>
+    <div class="kaijiang-show">
+        <ul>
+        	<li><a href="javascript:;"><span></span></a></li>
+            <li><a href="javascript:;"><span></span></a></li>
+            <li><a href="javascript:;"><span></span></a></li>
+            <li><a href="javascript:;"><span></span></a></li>
+        	<li><a href="javascript:;"><span></span></a></li>
+            <li><a href="javascript:;"><span></span></a></li>
+            <li><a href="javascript:;"><span></span></a></li>
+            <li><a href="javascript:;"><span></span></a></li>
+            <li><a href="javascript:;"><span></span></a></li>
+            <li><a href="javascript:;"><span></span></a></li>
+            <li><a href="javascript:;"><span></span></a></li>
+            <li><a href="javascript:;"><span></span></a></li>
+        </ul>
+    </div>
+    <div class="kaijiang-link">&nbsp;</div>
+</div>
+<footer></footer>
+</body>
+</html>
+<script>
+    var out_trade_no = '20161102192110706786', gailv = ['45.11','45.48','140.32','10.88','31.93','43.52','44.26','31.53','40.21','30.56','4.81','4.54'], sysmoney = 10;	
+$(function(){
+	$.each(gailv, function(i, d){
+		$(".kaijiang-list ul").append("<li><b>"+d+"</b> 元</li>");
+	});
+	$(".kaijiang-show li a").on("click", function(){
+		$(".kaijiang-show li a").unbind("click");
+		var c = $(this), parent = $(this).parent();
+		c.addClass("rote");
+		var openhb = function(){
+			$.ajax({url:"/api/openredpack.ashx", data:{out_trade_no:out_trade_no},
+				timeout:3000, type:"POST", dataType:"json",
+				error: function(XHR, TextStatus){
+					if(TextStatus=="timeout"){
+						openhb();
+					}else{
+						//document.write(XHR.responseText)
+						window.location.reload()
+					}
+				},
+				success:function(data){
+					if(data.status == 1){
+						c.removeClass("rote");
+						parent.addClass("current");
+						c.find("span").html(data.msg);
+						gailv.splice(gailv.indexOf(data.msg), 1);
+						$(".kaijiang-show li[class!='current']").each(function(i, d){
+							var index = Math.floor((Math.random() * gailv.length));
+							$(this).addClass("other");
+							$(this).find("span").html(gailv[index]);
+							gailv.splice(index, 1);
+						});
+						var rmoney = parseFloat(data.msg);
+						var showmsg = (rmoney < sysmoney) ? "手气稍微差了点，继续努力哦！加油！" : "手气不错哦！再接再厉，还有更多大红包等着你哦！";
+						layer.open({
+						    //skin:'redresult',
+						    style:'color:#fff;',
+						    title: ["本次拆红包获得<b> "+rmoney+" </b>元","font-weight:bold;font-size:20px;background-color: #c12c26; color:#fff;"],
+						    content:'<div>'+showmsg+'</div><br><a href="/?price=10" style="background:#F30; border-radius:.04rem; padding:.13rem .34rem; color:#fff;">继续拆红包</a>'
+						    //btn:["继续拆红包"],
+							//yes: function(){window.location.href = "/";}
+						});
+					}else{
+						layer.open({title: ["处理提示","background-color:#9c1f2f;color:#fff;"],
+							content:data.msg, btn:["确定"],shadeClose: false,
+							yes: function(){window.location.reload()}
+						});
+					}
+				}}
+			);
+		}
+		openhb();
+	});
+})
+</script>

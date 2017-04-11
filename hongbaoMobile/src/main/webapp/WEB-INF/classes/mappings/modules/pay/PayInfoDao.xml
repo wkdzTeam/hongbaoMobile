@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hongbao.mobile.modules.pay.dao.PayInfoDao">
+    
+	<sql id="payInfoColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.hongbao_id AS "hongbaoId",
+		a.trade_code AS "tradeCode",
+		a.trade_paycode AS "tradePaycode",
+		a.pay_title AS "payTitle",
+		a.pay_type AS "payType",
+		a.pay_merchant AS "payMerchant",
+		a.pay_business_type AS "payBusinessType",
+		a.mch_id AS "mchId",
+		a.user_ip AS "userIp",
+		a.user_city AS "userCity",
+		a.`describe` AS "describe",
+		a.amount AS "amount",
+		a.import_flag AS "importFlag",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.channel as "channel",
+		a.parent_userid AS "parentUserid",
+		a.buckle_flag as "buckleFlag"
+	</sql>
+	
+	<sql id="payInfoJoins">
+		
+	</sql>
+    
+	<select id="get" resultType="PayInfo">
+		SELECT 
+			<include refid="payInfoColumns"/>
+		FROM pay_info a
+		<include refid="payInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByItemStageNotLucky" resultType="PayInfo">
+		SELECT 
+			<include refid="payInfoColumns"/>
+		FROM pay_info a
+		<include refid="payInfoJoins"/>
+		WHERE a.item_stage_id = #{itemStageId}
+		and a.order_id!=#{luckOrderId}
+	</select>
+	<select id="findList" resultType="PayInfo">
+		SELECT 
+			<include refid="payInfoColumns"/>
+		FROM pay_info a
+		<include refid="payInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PayInfo">
+		SELECT 
+			<include refid="payInfoColumns"/>
+		FROM pay_info a
+		<include refid="payInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pay_info(
+			id,
+			user_id,
+			hongbao_id,
+			trade_code,
+			trade_paycode,
+			pay_title,
+			pay_type,
+			pay_merchant,
+			pay_business_type,
+			mch_id,
+			user_ip,
+			user_city,
+			`describe`,
+			amount,
+			import_flag,
+			create_date,
+			update_date,
+			del_flag,
+			channel,
+			parent_userid,
+			buckle_flag
+		) VALUES (
+			#{id},
+			#{userId},
+			#{hongbaoId},
+			#{tradeCode},
+			#{tradePaycode},
+			#{payTitle},
+			#{payType},
+			#{payMerchant},
+			#{payBusinessType},
+			#{mchId},
+			#{userIp},
+			#{userCity},
+			#{describe},
+			#{amount},
+			#{importFlag},
+			#{createDate},
+			#{updateDate},
+			#{delFlag},
+			#{channel},
+			#{parentUserid},
+			#{buckleFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pay_info SET 	
+			user_id = #{userId},
+			hongbao_id = #{hongbaoId},
+			trade_code = #{tradeCode},
+			trade_paycode = #{tradePaycode},
+			pay_title = #{payTitle},
+			pay_type = #{payType},
+			pay_merchant = #{payMerchant},
+			pay_business_type = #{payBusinessType},
+			mch_id = #{mchId},
+			user_ip = #{userIp},
+			user_city = #{userCity},
+			`describe` = #{describe},
+			amount = #{amount},
+			import_flag = #{importFlag},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE pay_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

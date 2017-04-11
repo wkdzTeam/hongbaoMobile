@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hongbao.mobile.modules.yongjin.dao.DuihuanInfoDao">
+    
+	<sql id="duihuanInfoColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.user_no AS "userNo",
+		a.pay_flag AS "payFlag",
+		a.user_open_id AS "userOpenId",
+		a.transfer_message AS "transferMessage",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.transfer_amount AS "transferAmount",
+		a.del_flag AS "delFlag",
+		a.transfer_no AS "transferNo",
+		a.transfer_time AS "transferTime",
+		a.transfer_type AS "transferType",
+		a.result_message AS "resultMessage"
+	</sql>
+	
+	<sql id="duihuanInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="DuihuanInfo">
+		SELECT 
+			<include refid="duihuanInfoColumns"/>
+		FROM duihuan_info a
+		<include refid="duihuanInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DuihuanInfo">
+		SELECT 
+			<include refid="duihuanInfoColumns"/>
+		FROM duihuan_info a
+		<include refid="duihuanInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="userNo != null and userNo != ''">
+				AND a.user_no = #{userNo}
+			</if>
+			<if test="transferTime != null and transferTime != ''">
+				AND a.transfer_time = #{transferTime}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DuihuanInfo">
+		SELECT 
+			<include refid="duihuanInfoColumns"/>
+		FROM duihuan_info a
+		<include refid="duihuanInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 根据用户获取兑换记录  -->
+	<select id="getDuihuanListByUser" resultType="DuihuanInfo" parameterType="java.util.Map">
+		SELECT 
+			<include refid="duihuanInfoColumns"/>
+		FROM duihuan_info a
+		<include refid="duihuanInfoJoins"/>
+		<where>
+			a.del_flag = '0'
+			AND a.user_id = #{userid}
+			<if test="transferType != null and transferType != ''">
+				AND a.transfer_type = #{transferType}
+			</if>
+		</where>
+		ORDER BY a.create_date desc limit 0,15
+	</select>
+	
+	
+	<insert id="insert">
+		INSERT INTO duihuan_info(
+			id,
+			user_id,
+			user_no,
+			pay_flag,
+			user_open_id,
+			transfer_message,
+			create_date,
+			update_date,
+			transfer_amount,
+			del_flag,
+			transfer_no,
+			transfer_time,
+			transfer_type,
+			result_message
+		) VALUES (
+			#{id},
+			#{userId},
+			#{userNo},
+			#{payFlag},
+			#{userOpenId},
+			#{transferMessage},
+			#{createDate},
+			#{updateDate},
+			#{transferAmount},
+			#{delFlag},
+			#{transferNo},
+			#{transferTime},
+			#{transferType},
+			#{resultMessage}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE duihuan_info SET 	
+			user_id = #{userId},
+			user_no = #{userNo},
+			pay_flag = #{payFlag},
+			user_open_id = #{userOpenId},
+			transfer_message = #{transferMessage},
+			update_date = #{updateDate},
+			transfer_amount = #{transferAmount},
+			transfer_no = #{transferNo},
+			transfer_time = #{transferTime},
+			transfer_type = #{transferType},
+			result_message = #{resultMessage}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE duihuan_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
