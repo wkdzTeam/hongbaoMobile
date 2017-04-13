@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.hongbao.mobile</groupId>
-	<artifactId>hongbaoMobile_</artifactId>
+	<artifactId>hongbaoMobile</artifactId>
 	<version>1.0.0</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>hongbaoMobile</name>
 	<url>http://www.hongbao.com</url>
@@ -581,7 +581,11 @@
 			<artifactId>httpmime</artifactId>
 			<version>4.3.6</version>
 		</dependency>
-				
+		<dependency>
+    		<groupId>commons-httpclient</groupId>
+    		<artifactId>commons-httpclient</artifactId>
+    		<version>3.1</version>
+		</dependency>
 		<!-- dom4j -->
 		<dependency>
 			<groupId>dom4j</groupId>
@@ -723,7 +727,22 @@
 					</additionalProjectnatures>
 				</configuration>
 			</plugin>
-
+				
+				<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.9</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals><goal>copy-dependencies</goal></goals>
+						<configuration>
+							<outputDirectory>./target/lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- tomcat6插件 -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
