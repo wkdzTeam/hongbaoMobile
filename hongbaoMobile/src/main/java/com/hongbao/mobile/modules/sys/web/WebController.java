@@ -30,6 +30,7 @@ import com.hongbao.mobile.modules.hongbao.service.HongbaoDrawInfoService;
 import com.hongbao.mobile.modules.hongbao.service.HongbaoInfoService;
 import com.hongbao.mobile.modules.user.entity.UserInfo;
 import com.hongbao.mobile.modules.user.service.UserInfoService;
+import com.hongbao.mobile.modules.user.util.UserInfoDataUtil;
 import com.hongbao.mobile.modules.weixin.util.WeixinUtil;
 
 /**
@@ -70,7 +71,11 @@ public class WebController extends BaseController {
 		try {
 			//获取登录用户
 			UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
+			//用户测试数据
+			userInfo = new UserInfo();
+			UserInfoDataUtil.fillUserInfo(userInfo);
 			userInfo = userInfoService.get(userInfo.getId());
+			
 			
 			//判断是否存在openid2
 			if(StringUtils.isBlank(userInfo.getOpenId2())) {
@@ -356,7 +361,7 @@ public class WebController extends BaseController {
 			//UserInfo userInfo = userInfoService.get("42f2e45b3e6e436e96a62775fb6e306f");
 			//request.getSession().setAttribute("userInfo", userInfo);
 			
-			if(request.getSession().getAttribute("userInfo")!=null) {
+			if(request.getSession().getAttribute("userInfo")==null) {
 				return "redirect:/draw/index";
 			}
 			

@@ -94,62 +94,64 @@
 			<bean class="com.hongbao.mobile.modules.sys.interceptor.LogInterceptor" />
 		</mvc:interceptor>
 		<!-- 权限验证拦截器 -->
-		<mvc:interceptor>
-			<!-- 设置拦截的url -->
+		<!-- <mvc:interceptor>
+			设置拦截的url
 			<mvc:mapping path="/**" />
-			<!-- 静态资源 -->
-			<mvc:exclude-mapping path="/static/**"/>
+			静态资源
+			<mvc:exclude-mapping path="/static/**"/> 
 			
-			<!-- 登录页面 -->
+			<mvc:exclude-mapping path="/draw/**"/> 
+			
+			登录页面
 			<mvc:exclude-mapping path="/login"/>
 			
-			<!-- 微信封杀页面 -->
+			微信封杀页面
 			<mvc:exclude-mapping path="/weixin110"/>
 			
-			<!-- 安全跳转 -->
+			安全跳转
 			<mvc:exclude-mapping path="/anq"/>
 			
-			<!-- 盾行支付通知 -->
+			盾行支付通知
 			<mvc:exclude-mapping path="/pay/dunxing/asyncNotify"/>
-			<!-- 盾行支付同步通知 -->
+			盾行支付同步通知
 			<mvc:exclude-mapping path="/pay/dunxing/syncNotify"/>
 			
-			<!-- 红包转盘盾行通知 -->
+			红包转盘盾行通知
 			<mvc:exclude-mapping path="/pay/dunxing/asyncDrawNotify"/>
-			<!-- 红包转盘盾行同步通知 -->
+			红包转盘盾行同步通知
 			<mvc:exclude-mapping path="/pay/dunxing/syncDrawNotify"/>
 			
-			<!-- 威富通支付通知 -->
+			威富通支付通知
 			<mvc:exclude-mapping path="/pay/weifutong/asyncNotify"/>
-			<!-- 威富通支付同步通知 -->
+			威富通支付同步通知
 			<mvc:exclude-mapping path="/pay/weifutong/syncNotify"/>
 			
-			<!-- 红包转盘威富通异步通知 -->
+			红包转盘威富通异步通知
 			<mvc:exclude-mapping path="/pay/weifutong/asyncDrawNotify"/>
-			<!-- 红包转盘威富通同步通知 -->
+			红包转盘威富通同步通知
 			<mvc:exclude-mapping path="/pay/weifutong/syncDrawNotify"/>
 			
-			<!-- 红包转盘浦发异步通知 -->
+			红包转盘浦发异步通知
 			<mvc:exclude-mapping path="/pay/pufa/asyncDrawNotify"/>
-			<!-- 红包转盘浦发同步通知 -->
+			红包转盘浦发同步通知
 			<mvc:exclude-mapping path="/pay/pufa/syncDrawNotify"/>
 			
-			<!-- 红包转盘南粤异步通知 -->
+			红包转盘南粤异步通知
 			<mvc:exclude-mapping path="/pay/nanyue/asyncDrawNotify"/>
-			<!-- 红包转盘南粤同步通知 -->
+			红包转盘南粤同步通知
 			<mvc:exclude-mapping path="/pay/nanyue/syncDrawNotify"/>
 			
-			<!-- 微信回调 -->
+			微信回调
 			<mvc:exclude-mapping path="/weixin/oauth"/>
 			<mvc:exclude-mapping path="/weixin/oauthOther"/>
 			<mvc:exclude-mapping path="/weixin/openOauth"/>
 			
-			<!-- 图标 -->
+			图标
 			<mvc:exclude-mapping path="/favicon.ico"/>
 			
-			<!-- 设置拦截器位置 -->
+			设置拦截器位置
 			<bean class="com.hongbao.mobile.modules.sys.interceptor.PermissionsInterceptor" />
-		</mvc:interceptor>
+		</mvc:interceptor> -->
 	</mvc:interceptors>
 	
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">

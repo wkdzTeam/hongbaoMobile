@@ -41,6 +41,7 @@ import com.hongbao.mobile.modules.hongbao.service.HongbaoInfoService;
 import com.hongbao.mobile.modules.pay.service.PayInfoService;
 import com.hongbao.mobile.modules.user.entity.UserInfo;
 import com.hongbao.mobile.modules.user.service.UserInfoService;
+import com.hongbao.mobile.modules.user.util.UserInfoDataUtil;
 import com.hongbao.mobile.modules.yongjin.entity.DuihuanInfo;
 import com.hongbao.mobile.modules.yongjin.service.DuihuanInfoService;
 
@@ -311,6 +312,9 @@ public class HongbaoController extends BaseController {
 	public String yongjin(HttpServletRequest request, HttpServletResponse response,Model model) {
 		//获取登录用户
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
+		//测试用户数据
+		userInfo = new  UserInfo();
+		UserInfoDataUtil.fillUserInfo(userInfo);
 		//设置用户编号
 		model.addAttribute("userNo", userInfo.getUserNo());
 		//获取最新的用户信息
@@ -384,13 +388,16 @@ public class HongbaoController extends BaseController {
 	@RequestMapping(value = "kefu")
 	public String kefu(HttpServletRequest request, HttpServletResponse response,Model model) {
 		//查询中奖信息
-		String luckyUserListStr = JedisUtils.get(JedisUtils.KEY_PREFIX+":luckyUserList");
-		if(StringUtils.isNotBlank(luckyUserListStr)) {
-			JSONArray luckyUserList = JSONArray.fromObject(luckyUserListStr);
-			model.addAttribute("luckyUserList", luckyUserList);
-		}
+//		String luckyUserListStr = JedisUtils.get(JedisUtils.KEY_PREFIX+":luckyUserList");
+//		if(StringUtils.isNotBlank(luckyUserListStr)) {
+//			JSONArray luckyUserList = JSONArray.fromObject(luckyUserListStr);
+//			model.addAttribute("luckyUserList", luckyUserList);
+//		}
 		//获取登录用户
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
+		//测试用户数据
+		userInfo = new UserInfo();
+		UserInfoDataUtil.fillUserInfo(userInfo);
 		//设置用户编号
 		model.addAttribute("userNo", userInfo.getUserNo());
 		return "modules/hongbao/kefu";

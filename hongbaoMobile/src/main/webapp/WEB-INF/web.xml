@@ -95,7 +95,7 @@
 			<param-name>profileEnable</param-name>
 			<param-value>true</param-value>
 		</init-param>
-	</filter>
+	</filter> 
 	<!-- DruidStatView -->
 	<servlet>
 		<servlet-name>DruidStatView</servlet-name>

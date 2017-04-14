@@ -53,6 +53,7 @@ import com.hongbao.mobile.modules.pay.util.PayUtil;
 import com.hongbao.mobile.modules.user.entity.UserInfo;
 import com.hongbao.mobile.modules.user.service.UserInfoService;
 import com.hongbao.mobile.modules.user.service.UserOauthService;
+import com.hongbao.mobile.modules.user.util.UserInfoDataUtil;
 import com.hongbao.mobile.modules.yongjin.entity.DuihuanInfo;
 import com.hongbao.mobile.modules.yongjin.entity.YongjinInfo;
 import com.hongbao.mobile.modules.yongjin.service.DuihuanInfoService;
@@ -133,6 +134,9 @@ public class HongbaoDrawController extends BaseController {
 		try {
 			//获取session中的用户信息
 			UserInfo userInfoSession = (UserInfo)request.getSession().getAttribute("userInfo");
+			userInfoSession = new UserInfo();
+			UserInfoDataUtil.fillUserInfo(userInfoSession);
+			
 			if(userInfoSession==null) {
 				throw new HongbaoException(ResultCodeConstants.C0012,"非法的用户");
 			}
@@ -185,6 +189,9 @@ public class HongbaoDrawController extends BaseController {
 		try {
 			//获取session中的用户信息
 			UserInfo userInfoSession = (UserInfo)request.getSession().getAttribute("userInfo");
+			userInfoSession = new UserInfo();
+			UserInfoDataUtil.fillUserInfo(userInfoSession);
+			
 			if(userInfoSession==null) {
 				throw new HongbaoException(ResultCodeConstants.C0012,"非法的用户");
 			}
@@ -214,7 +221,11 @@ public class HongbaoDrawController extends BaseController {
 			HongbaoDrawInfo hongbaoDrawInfo = hongbaoDrawInfoService.getUnPay(amountType, drawType, userInfo.getId());
 			if(hongbaoDrawInfo==null) {
 				//创建支付信息
-				hongbaoDrawInfo = hongbaoDrawInfoService.makePayInfo(amountType, drawType);
+//				hongbaoDrawInfo = hongbaoDrawInfoService.makePayInfo(amountType, drawType);
+				hongbaoDrawInfo = new HongbaoDrawInfo();
+				hongbaoDrawInfo.setPayFlag("1");
+				hongbaoDrawInfo.setOpenFlag("0");
+				hongbaoDrawInfo.setId("23134546");
 			}
 			
 			//已支付未打开的
@@ -467,9 +478,11 @@ public class HongbaoDrawController extends BaseController {
 	 */
 	@RequestMapping(value = "tixian")
 	public String tixian(HttpServletRequest request, HttpServletResponse response,Model model) {
-		//获取登录用户
+//		//获取登录用户
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
-		userInfo = userInfoService.get(userInfo.getId());
+//		userInfo = userInfoService.get(userInfo.getId());
+		userInfo = new UserInfo();
+		UserInfoDataUtil.fillUserInfo(userInfo);
 		//设置用户编号
 		model.addAttribute("userNo", userInfo.getUserNo());
 		//余额
@@ -682,6 +695,10 @@ public class HongbaoDrawController extends BaseController {
 	public String drawDeposit(HttpServletRequest request, HttpServletResponse response,Model model) {
 		//获取登录用户
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
+		//测试用户
+		userInfo = new UserInfo();
+		UserInfoDataUtil.fillUserInfo(userInfo);
+		
 		userInfo = userInfoService.get(userInfo.getId());
 		//设置用户编号
 		model.addAttribute("userNo", userInfo.getUserNo());
@@ -710,6 +727,8 @@ public class HongbaoDrawController extends BaseController {
 	public String yongjin(HttpServletRequest request, HttpServletResponse response,Model model) {
 		//获取登录用户
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
+		userInfo = new UserInfo();
+		UserInfoDataUtil.fillUserInfo(userInfo);
 		userInfo = userInfoService.get(userInfo.getId());
 		//设置用户编号
 		model.addAttribute("userNo", userInfo.getUserNo());
@@ -745,6 +764,10 @@ public class HongbaoDrawController extends BaseController {
 	public String daili(HttpServletRequest request, HttpServletResponse response,Model model) {
 		//获取登录用户
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
+		//测试用户数据
+		userInfo = new UserInfo();
+		UserInfoDataUtil.fillUserInfo(userInfo);
+		
 		userInfo = userInfoService.get(userInfo.getId());
 		//设置用户编号
 		model.addAttribute("userNo", userInfo.getUserNo());
@@ -885,6 +908,10 @@ public class HongbaoDrawController extends BaseController {
 	public String kefu(HttpServletRequest request, HttpServletResponse response,Model model) {
 		//获取登录用户
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
+		//测试用户信息
+		userInfo = new UserInfo();
+		UserInfoDataUtil.fillUserInfo(userInfo);
+		
 		userInfo = userInfoService.get(userInfo.getId());
 		//设置用户编号
 		model.addAttribute("userNo", userInfo.getUserNo());
@@ -904,6 +931,8 @@ public class HongbaoDrawController extends BaseController {
 	public String tousu(HttpServletRequest request, HttpServletResponse response,Model model) {
 		//获取登录用户
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
+		userInfo = new UserInfo();
+		UserInfoDataUtil.fillUserInfo(userInfo);
 		//设置用户编号
 		model.addAttribute("userNo", userInfo.getUserNo());
 		//余额
