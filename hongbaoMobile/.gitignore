@@ -3,3 +3,5 @@
 .project
 /target/
 .txt
+.idea
+*.class
