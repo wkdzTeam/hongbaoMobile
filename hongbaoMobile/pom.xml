@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.hongbao.mobile</groupId>
-	<artifactId>hongbaoMobile_</artifactId>
+	<artifactId>hongbao</artifactId>
 	<version>1.0.0</version>
 	<packaging>war</packaging>
 
@@ -581,7 +581,11 @@
 			<artifactId>httpmime</artifactId>
 			<version>4.3.6</version>
 		</dependency>
-				
+		<dependency>
+    		<groupId>commons-httpclient</groupId>
+    		<artifactId>commons-httpclient</artifactId>
+    	<version>3.1</version>
+</dependency>
 		<!-- dom4j -->
 		<dependency>
 			<groupId>dom4j</groupId>
