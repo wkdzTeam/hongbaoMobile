@@ -26,6 +26,7 @@ import com.hongbao.mobile.common.exception.HongbaoException;
 import com.hongbao.mobile.common.persistence.Page;
 import com.hongbao.mobile.common.service.CrudService;
 import com.hongbao.mobile.common.utils.IdGen;
+import com.hongbao.mobile.common.utils.UUIDGenerator;
 import com.hongbao.mobile.modules.channeluser.entity.ChannelUser;
 import com.hongbao.mobile.modules.channeluser.service.ChannelUserService;
 import com.hongbao.mobile.modules.hongbao.dao.HongbaoInfoDao;
@@ -248,7 +249,8 @@ public class HongbaoInfoService extends CrudService<HongbaoInfoDao, HongbaoInfo>
 		//创建红包订单信息
 		HongbaoInfo hongbaoInfo = new HongbaoInfo();
 		hongbaoInfo.setId(IdGen.uuid());//id
-		hongbaoInfo.setHongbaoNo(makeHongbaoNo());//订单编号
+//		hongbaoInfo.setHongbaoNo(makeHongbaoNo());//订单编号
+		hongbaoInfo.setHongbaoNo(UUIDGenerator.generate());//订单编号
 		hongbaoInfo.setUserId(userInfo.getId());//用户id
 		hongbaoInfo.setAmountType(amountType);//金额类型
 		hongbaoInfo.setAmount(new BigDecimal(amount));//金额

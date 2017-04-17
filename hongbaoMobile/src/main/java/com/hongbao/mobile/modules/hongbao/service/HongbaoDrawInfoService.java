@@ -24,6 +24,7 @@ import com.hongbao.mobile.common.persistence.Page;
 import com.hongbao.mobile.common.service.CrudService;
 import com.hongbao.mobile.common.utils.IdGen;
 import com.hongbao.mobile.common.utils.JedisUtils;
+import com.hongbao.mobile.common.utils.UUIDGenerator;
 import com.hongbao.mobile.modules.hongbao.dao.HongbaoDrawInfoDao;
 import com.hongbao.mobile.modules.hongbao.entity.HongbaoDrawDetail;
 import com.hongbao.mobile.modules.hongbao.entity.HongbaoDrawInfo;
@@ -245,7 +246,8 @@ public class HongbaoDrawInfoService extends CrudService<HongbaoDrawInfoDao, Hong
 		//创建红包订单信息
 		HongbaoDrawInfo hongbaoDrawInfo = new HongbaoDrawInfo();
 		hongbaoDrawInfo.setId(IdGen.uuid());//id
-		hongbaoDrawInfo.setHongbaoDrawNo(makeHongbaoDrawNo());//订单编号
+//		hongbaoDrawInfo.setHongbaoDrawNo(makeHongbaoDrawNo());//订单编号
+		hongbaoDrawInfo.setHongbaoDrawNo(UUIDGenerator.generate());//订单编号
 		hongbaoDrawInfo.setUserId(userInfo.getId());//用户id
 		hongbaoDrawInfo.setDrawType(drawType);//转盘类型
 		hongbaoDrawInfo.setAmountType(amountType);//金额类型

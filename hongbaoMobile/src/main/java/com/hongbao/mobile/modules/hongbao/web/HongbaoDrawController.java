@@ -134,8 +134,6 @@ public class HongbaoDrawController extends BaseController {
 		try {
 			//获取session中的用户信息
 			UserInfo userInfoSession = (UserInfo)request.getSession().getAttribute("userInfo");
-			userInfoSession = new UserInfo();
-			UserInfoDataUtil.fillUserInfo(userInfoSession);
 			
 			if(userInfoSession==null) {
 				throw new HongbaoException(ResultCodeConstants.C0012,"非法的用户");
@@ -189,8 +187,6 @@ public class HongbaoDrawController extends BaseController {
 		try {
 			//获取session中的用户信息
 			UserInfo userInfoSession = (UserInfo)request.getSession().getAttribute("userInfo");
-			userInfoSession = new UserInfo();
-			UserInfoDataUtil.fillUserInfo(userInfoSession);
 			
 			if(userInfoSession==null) {
 				throw new HongbaoException(ResultCodeConstants.C0012,"非法的用户");
@@ -221,12 +217,9 @@ public class HongbaoDrawController extends BaseController {
 			HongbaoDrawInfo hongbaoDrawInfo = hongbaoDrawInfoService.getUnPay(amountType, drawType, userInfo.getId());
 			if(hongbaoDrawInfo==null) {
 				//创建支付信息
-//				hongbaoDrawInfo = hongbaoDrawInfoService.makePayInfo(amountType, drawType);
+				hongbaoDrawInfo = hongbaoDrawInfoService.makePayInfo(amountType, drawType);
 			}
-			hongbaoDrawInfo = new HongbaoDrawInfo();
-			hongbaoDrawInfo.setPayFlag("1");
-			hongbaoDrawInfo.setOpenFlag("0");
-			hongbaoDrawInfo.setId("23134546");
+			
 			
 			//已支付未打开的
 			if(hongbaoDrawInfo.getPayFlag().equals("1") && hongbaoDrawInfo.getOpenFlag().equals("0")) {
@@ -253,7 +246,6 @@ public class HongbaoDrawController extends BaseController {
 			returnJson.put("hongbaoDrawId", hongbaoDrawInfo.getId());
 			
 			//设置支付方式
-			payType = "3";
 			returnJson.put("payType", payType);
 			
 		} catch (HongbaoException hongbao) {
@@ -429,8 +421,7 @@ public class HongbaoDrawController extends BaseController {
 		JSONObject returnJson = new JSONObject();
 		
 		UserInfo userInfoSession = (UserInfo)request.getSession().getAttribute("userInfo");
-		userInfoSession = new UserInfo();
-		UserInfoDataUtil.fillUserInfo(userInfoSession);
+		
 		//获取用户操作锁
 		KeyLock<String> userOperationLock = LockUtils.getUserOperationLock();
 		//锁住用户id
@@ -438,32 +429,26 @@ public class HongbaoDrawController extends BaseController {
 		
 		try {
 			//获取登录用户
-//			UserInfo userInfo = userInfoService.get(userInfoSession.getId());
-//			BigDecimal tempBalance = userInfo.getBalance();
-//			//余额支付
-//			HongbaoDrawInfo hongbaoDrawInfo = hongbaoDrawInfoBalancePayService.balancePay(hongbaoDrawId);
-//			tempBalance = tempBalance.subtract(hongbaoDrawInfo.getAmount());
-//			//打开红包
-//			hongbaoDrawInfo = hongbaoDrawInfoService.openHongbao(hongbaoDrawInfo.getId());
+			UserInfo userInfo = userInfoService.get(userInfoSession.getId());
+			BigDecimal tempBalance = userInfo.getBalance();
+			//余额支付
+			HongbaoDrawInfo hongbaoDrawInfo = hongbaoDrawInfoBalancePayService.balancePay(hongbaoDrawId);
+			tempBalance = tempBalance.subtract(hongbaoDrawInfo.getAmount());
+			//打开红包
+			hongbaoDrawInfo = hongbaoDrawInfoService.openHongbao(hongbaoDrawInfo.getId());
 			//返回成功信息
-//			returnJson = ResultCodeConstants.C0.toJsonObject();
-//			//设置幸运号码
-//			returnJson.put("luckyNum", hongbaoDrawInfo.getLuckyNum());
-//			//设置红包金额
-//			returnJson.put("luckyAmount", hongbaoDrawInfo.getLuckyAmount());
-//			//更新用户
-//			userInfo = userInfoService.get(userInfo.getId());
-//			//设置余额
-//			returnJson.put("balance", userInfo.getBalance());
-//			//设置临时余额
-//			returnJson.put("tempBalance", tempBalance);
-			
-			
 			returnJson = ResultCodeConstants.C0.toJsonObject();
-			returnJson.put("luckyNum", "1");
-			returnJson.put("luckyAmount", "3");
-			returnJson.put("balance", "5");
-			returnJson.put("tempBalance", 12);
+			//设置幸运号码
+			returnJson.put("luckyNum", hongbaoDrawInfo.getLuckyNum());
+			//设置红包金额
+			returnJson.put("luckyAmount", hongbaoDrawInfo.getLuckyAmount());
+			//更新用户
+			userInfo = userInfoService.get(userInfo.getId());
+			//设置余额
+			returnJson.put("balance", userInfo.getBalance());
+			//设置临时余额
+			returnJson.put("tempBalance", tempBalance);
+			
 			
 		}
 		catch (HongbaoException hongbao) {
@@ -490,9 +475,7 @@ public class HongbaoDrawController extends BaseController {
 	public String tixian(HttpServletRequest request, HttpServletResponse response,Model model) {
 //		//获取登录用户
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
-//		userInfo = userInfoService.get(userInfo.getId());
-		userInfo = new UserInfo();
-		UserInfoDataUtil.fillUserInfo(userInfo);
+		userInfo = userInfoService.get(userInfo.getId());
 		//设置用户编号
 		model.addAttribute("userNo", userInfo.getUserNo());
 		//余额
@@ -705,9 +688,6 @@ public class HongbaoDrawController extends BaseController {
 	public String drawDeposit(HttpServletRequest request, HttpServletResponse response,Model model) {
 		//获取登录用户
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
-		//测试用户
-		userInfo = new UserInfo();
-		UserInfoDataUtil.fillUserInfo(userInfo);
 		
 		userInfo = userInfoService.get(userInfo.getId());
 		//设置用户编号
@@ -774,9 +754,6 @@ public class HongbaoDrawController extends BaseController {
 	public String daili(HttpServletRequest request, HttpServletResponse response,Model model) {
 		//获取登录用户
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
-		//测试用户数据
-		userInfo = new UserInfo();
-		UserInfoDataUtil.fillUserInfo(userInfo);
 		
 		userInfo = userInfoService.get(userInfo.getId());
 		//设置用户编号

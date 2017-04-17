@@ -15,7 +15,7 @@
 
 		<!-- 数据库链接 -->
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://localhost:3306/hongbao?charterEncoding=UTF-8" userId="root"
+			connectionURL="jdbc:mysql://120.77.86.183:3306/hongbao_test?charterEncoding=UTF-8" userId="root"
 			password="123456">
 		</jdbcConnection>
 

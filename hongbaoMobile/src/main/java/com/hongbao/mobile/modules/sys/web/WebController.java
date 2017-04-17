@@ -71,17 +71,12 @@ public class WebController extends BaseController {
 		try {
 			//获取登录用户
 			UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
-			//用户测试数据
-			userInfo = new UserInfo();
-			UserInfoDataUtil.fillUserInfo(userInfo);
-			userInfo = userInfoService.get(userInfo.getId());
 			
-			
-			//判断是否存在openid2
-			if(StringUtils.isBlank(userInfo.getOpenId2())) {
-	            //跳转openid2登录
-	            return "redirect:/weixin/toGetOpenIdOther";
-			}
+//			//判断是否存在openid2
+//			if(StringUtils.isBlank(userInfo.getOpenId2())) {
+//	            //跳转openid2登录
+//	            return "redirect:/weixin/toGetOpenIdOther";
+//			}
 			
 			//TODO  黑名单拦截
 			String userNo = userInfo.getUserNo();
@@ -359,9 +354,10 @@ public class WebController extends BaseController {
 			//测试用去掉注释
 			//UserInfo userInfo = userInfoService.get("fe54ddbbf58746df85742dad5d2637e0");
 			//UserInfo userInfo = userInfoService.get("42f2e45b3e6e436e96a62775fb6e306f");
-			//request.getSession().setAttribute("userInfo", userInfo);
-			
-			if(request.getSession().getAttribute("userInfo")==null) {
+			//request.getSession().setAttribute("userInfo",z userInfo);
+			UserInfo userInfo = userInfoService.get("12312465465797899");
+			request.getSession().setAttribute("userInfo", userInfo);
+			if(request.getSession().getAttribute("userInfo")!=null) {
 				return "redirect:/draw/index";
 			}
 			

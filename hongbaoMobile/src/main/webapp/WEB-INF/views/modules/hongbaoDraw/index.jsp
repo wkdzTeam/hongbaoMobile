@@ -261,7 +261,7 @@
         <div class="footer">
             <ul class="footer_ul">
                 <li class="footer_li" class="active_footer">
-                    <a href="javascript:;" onclick="show()">
+                    <a href="${ctx}/draw/index">
                         <img src="${ctxStatic }/modules/hongbaoDraw/images/item1.png" alt="">
                         <p>支付</p>
                     </a>
