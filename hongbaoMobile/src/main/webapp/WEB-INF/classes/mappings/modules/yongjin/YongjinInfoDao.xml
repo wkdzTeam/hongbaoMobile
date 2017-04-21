@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hongbao.mobile.modules.yongjin.dao.YongjinInfoDao">
+    
+	<sql id="yongjinInfoColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.user_no AS "userNo",
+		a.amount AS "amount",
+		a.user_id_origin AS "userIdOrigin",
+		a.user_no_origin AS "userNoOrigin",
+		a.hongbao_no AS "hongbaoNo",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="yongjinInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="YongjinInfo">
+		SELECT 
+			<include refid="yongjinInfoColumns"/>
+		FROM yongjin_info a
+		<include refid="yongjinInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YongjinInfo">
+		SELECT 
+			<include refid="yongjinInfoColumns"/>
+		FROM yongjin_info a
+		<include refid="yongjinInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>	
+	
+	<select id="findAllList" resultType="YongjinInfo">
+		SELECT 
+			<include refid="yongjinInfoColumns"/>
+		FROM yongjin_info a
+		<include refid="yongjinInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 根据用户获取佣金记录  -->
+	<select id="getYongjinListByUser" resultType="YongjinInfo" parameterType="java.util.Map">
+		SELECT 
+			<include refid="yongjinInfoColumns"/>
+		FROM yongjin_info a
+		<include refid="yongjinInfoJoins"/>
+		<where>
+			a.del_flag = '0'
+			AND a.user_id = #{userid}
+		</where>
+		ORDER BY a.create_date desc limit 0,20;
+	</select>
+	
+	<!-- 根据用户获取兑换记录  -->
+	<select id="getYongjinSumByUser" resultType="java.util.HashMap" parameterType="java.util.Map">
+		select IFNULL(SUM(amount),0) as 'yongjinSum' FROM yongjin_info a 
+		<where>
+			a.del_flag = '0'
+			AND a.user_id = #{userid}
+		</where>
+	</select>
+	
+	
+	<insert id="insert">
+		INSERT INTO yongjin_info(
+			id,
+			user_id,
+			user_no,
+			amount,
+			user_id_origin,
+			user_no_origin,
+			hongbao_no,
+			create_date,
+			del_flag,
+			update_date
+		) VALUES (
+			#{id},
+			#{userId},
+			#{userNo},
+			#{amount},
+			#{userIdOrigin},
+			#{userNoOrigin},
+			#{hongbaoNo},
+			#{createDate},
+			#{delFlag},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yongjin_info SET 	
+			user_id = #{userId},
+			user_no = #{userNo},
+			amount = #{amount},
+			user_id_origin = #{userIdOrigin},
+			user_no_origin = #{userNoOrigin},
+			hongbao_no = #{hongbaoNo},
+			del_flag = #{delFlag}
+		WHERE id = #{id}
+	</update>
+	
+	
+</mapper>
