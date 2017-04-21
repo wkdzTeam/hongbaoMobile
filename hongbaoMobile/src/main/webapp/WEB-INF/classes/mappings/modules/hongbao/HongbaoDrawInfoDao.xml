@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hongbao.mobile.modules.hongbao.dao.HongbaoDrawInfoDao">
+
+	<!-- 获取未打开的红包 -->
+	<select id="getUnOpen" resultType="HongbaoDrawInfo">
+		SELECT 
+			<include refid="hongbaoDrawInfoColumns"/>
+		FROM hongbao_draw_info a
+		<include refid="hongbaoDrawInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.user_id = #{userId}
+			AND a.pay_flag in ('1','-1')
+			AND a.open_flag='0'
+		</where>
+	</select>
+	
+	<!-- 获取未支付的红包 -->
+	<select id="getUnPay" resultType="HongbaoDrawInfo">
+		SELECT 
+			<include refid="hongbaoDrawInfoColumns"/>
+		FROM hongbao_draw_info a
+		<include refid="hongbaoDrawInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.user_id = #{userId}
+			AND a.amount_type = #{amountType}
+			AND a.draw_type = #{drawType}
+			AND a.pay_flag = '0'
+			AND a.create_date &gt; #{createDate}
+		</where>
+	</select>
+
+    <!-- 获取下一个红包转盘编号 -->
+	<select id="getHongbaoDrawNoNext" resultType="java.lang.String">
+		select serial_number_nextval('hongbao_draw_no');
+	</select>
+	
+	<!-- 获取当前红包转盘编号 -->
+	<select id="getHongbaoDrawNoCurr" resultType="java.lang.String">
+		select serial_number_currval('hongbao_draw_no');
+	</select>
+    
+	<sql id="hongbaoDrawInfoColumns">
+		a.id AS "id",
+		a.hongbao_draw_no AS "hongbaoDrawNo",
+		a.user_id AS "userId",
+		a.draw_type AS "drawType",
+		a.amount_type AS "amountType",
+		a.amount AS "amount",
+		a.lucky_num AS "luckyNum",
+		a.lucky_amount AS "luckyAmount",
+		a.open_flag AS "openFlag",
+		a.open_date AS "openDate",
+		a.pay_id AS "payId",
+		a.pay_type AS "payType",
+		a.pay_merchant AS "payMerchant",
+		a.pay_url AS "payUrl",
+		a.pay_token_id AS "payTokenId",
+		a.pay_flag AS "payFlag",
+		a.pay_date AS "payDate",
+		a.channel AS "channel",
+		a.parent_userid AS "parentUserid",
+		a.import_flag AS "importFlag",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="hongbaoDrawInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="HongbaoDrawInfo">
+		SELECT 
+			<include refid="hongbaoDrawInfoColumns"/>
+		FROM hongbao_draw_info a
+		<include refid="hongbaoDrawInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="HongbaoDrawInfo">
+		SELECT 
+			<include refid="hongbaoDrawInfoColumns"/>
+		FROM hongbao_draw_info a
+		<include refid="hongbaoDrawInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="hongbaoDrawNo != null and hongbaoDrawNo != ''">
+				AND a.hongbao_draw_no = #{hongbaoDrawNo}
+			</if>
+			<if test="drawType != null and drawType != ''">
+				AND a.draw_type = #{drawType}
+			</if>
+			<if test="amountType != null and amountType != ''">
+				AND a.amount_type = #{amountType}
+			</if>
+			<if test="openFlag != null and openFlag != ''">
+				AND a.open_flag = #{openFlag}
+			</if>
+			<if test="payFlag != null and payFlag != ''">
+				AND a.pay_flag = #{payFlag}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="HongbaoDrawInfo">
+		SELECT 
+			<include refid="hongbaoDrawInfoColumns"/>
+		FROM hongbao_draw_info a
+		<include refid="hongbaoDrawInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<!-- 根据用户获取兑换记录  -->
+	<select id="getListHongbaoDrawByUser" resultType="HongbaoDrawInfo" parameterType="java.util.Map">
+		SELECT 
+			<include refid="hongbaoDrawInfoColumns"/>
+		FROM hongbao_draw_info a
+		<include refid="hongbaoDrawInfoJoins"/>
+		<where>
+			a.del_flag = '0'
+			AND a.pay_flag = '1'
+			<!--  AND a.pay_type = '1'  -->
+			AND a.parent_userid = #{parentUserid}
+		</where>
+		ORDER BY a.pay_date desc limit 0,10
+	</select>
+	
+	
+	
+	<insert id="insert">
+		INSERT INTO hongbao_draw_info(
+			id,
+			hongbao_draw_no,
+			user_id,
+			draw_type,
+			amount_type,
+			amount,
+			lucky_num,
+			lucky_amount,
+			open_flag,
+			open_date,
+			pay_id,
+			pay_type,
+			pay_merchant,
+			pay_url,
+			pay_token_id,
+			pay_flag,
+			pay_date,
+			channel,
+			parent_userid,
+			import_flag,
+			create_date,
+			update_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{hongbaoDrawNo},
+			#{userId},
+			#{drawType},
+			#{amountType},
+			#{amount},
+			#{luckyNum},
+			#{luckyAmount},
+			#{openFlag},
+			#{openDate},
+			#{payId},
+			#{payType},
+			#{payMerchant},
+			#{payUrl},
+			#{payTokenId},
+			#{payFlag},
+			#{payDate},
+			#{channel},
+			#{parentUserid},
+			#{importFlag},
+			#{createDate},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE hongbao_draw_info SET 	
+			hongbao_draw_no = #{hongbaoDrawNo},
+			user_id = #{userId},
+			draw_type = #{drawType},
+			amount_type = #{amountType},
+			amount = #{amount},
+			lucky_num = #{luckyNum},
+			lucky_amount = #{luckyAmount},
+			open_flag = #{openFlag},
+			open_date = #{openDate},
+			pay_id = #{payId},
+			pay_type = #{payType},
+			pay_merchant = #{payMerchant},
+			pay_url = #{payUrl},
+			pay_token_id = #{payTokenId},
+			pay_flag = #{payFlag},
+			pay_date = #{payDate},
+			channel = #{channel},
+			parent_userid = #{parentUserid},
+			import_flag = #{importFlag},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE hongbao_draw_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

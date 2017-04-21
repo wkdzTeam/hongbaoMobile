@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hongbao.mobile.modules.pay.dao.PayConfigDao">
+
+	<!-- 根据商户号获取南粤的支付配置 -->
+	<select id="getNanyueByMchId" resultType="PayConfig">
+		SELECT 
+			a.`key`,
+			a.callback_domain AS "callbackDomain",
+			a.order_prefix AS "orderPrefix"
+		FROM pay_config a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and a.pay_merchant = '6'
+			and a.mch_id = ${mchId}
+		</where>
+	</select>
+
+	<!-- 根据应用id获取浦发的支付配置 -->
+	<select id="getPufaByAppId" resultType="PayConfig">
+		SELECT 
+			a.`key`,
+			a.callback_domain AS "callbackDomain",
+			a.order_prefix AS "orderPrefix"
+		FROM pay_config a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and a.pay_merchant = '4'
+			and a.app_id = ${appId}
+		</where>
+	</select>
+	
+	<!-- 根据商户号获取威富通的支付配置 -->
+	<select id="getWeifutongByMchId" resultType="PayConfig">
+		SELECT 
+			a.`key`,
+			a.callback_domain AS "callbackDomain",
+			a.order_prefix AS "orderPrefix"
+		FROM pay_config a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and a.pay_merchant = '2'
+			and a.mch_id = ${mchId}
+		</where>
+	</select>
+    
+	<sql id="payConfigColumns">
+		a.id AS "id",
+		a.pay_merchant AS "payMerchant",
+		a.pay_type AS "payType",
+		a.app_id AS "appId",
+		a.app_secret AS "appSecret",
+		a.mch_id AS "mchId",
+		a.`key` AS "key",
+		a.item_no AS "itemNo",
+		a.bank_id AS "bankId",
+		a.req_url AS "reqUrl",
+		a.pay_url AS "payUrl",
+		a.sign_url AS "signUrl",
+		a.weixin_callback_domain AS "weixinCallbackDomain",
+		a.async_notify_url AS "asyncNotifyUrl",
+		a.sync_notify_url AS "syncNotifyUrl",
+		a.draw_async_notify_url AS "drawAsyncNotifyUrl",
+		a.draw_sync_notify_url AS "drawSyncNotifyUrl",
+		a.callback_domain AS "callbackDomain",
+		a.order_prefix AS "orderPrefix",
+		a.use_flag AS "useFlag",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="payConfigJoins">
+	</sql>
+    
+	<select id="get" resultType="PayConfig">
+		SELECT 
+			<include refid="payConfigColumns"/>
+		FROM pay_config a
+		<include refid="payConfigJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PayConfig">
+		SELECT 
+			<include refid="payConfigColumns"/>
+		FROM pay_config a
+		<include refid="payConfigJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PayConfig">
+		SELECT 
+			<include refid="payConfigColumns"/>
+		FROM pay_config a
+		<include refid="payConfigJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pay_config(
+			id,
+			pay_merchant,
+			pay_type,
+			app_id,
+			app_secret,
+			mch_id,
+			`key`,
+			item_no,
+			bank_id,
+			req_url,
+			pay_url,
+			sign_url,
+			weixin_callback_domain,
+			async_notify_url,
+			sync_notify_url,
+			draw_async_notify_url,
+			draw_sync_notify_url,
+			callback_domain,
+			order_prefix,
+			use_flag,
+			create_date,
+			update_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{payMerchant},
+			#{payType},
+			#{appId},
+			#{appSecret},
+			#{mchId},
+			#{key},
+			#{itemNo},
+			#{bankId},
+			#{reqUrl},
+			#{payUrl},
+			#{signUrl},
+			#{weixinCallbackDomain},
+			#{asyncNotifyUrl},
+			#{syncNotifyUrl},
+			#{drawAsyncNotifyUrl},
+			#{drawSyncNotifyUrl},
+			#{callbackDomain},
+			#{orderPrefix},
+			#{useFlag},
+			#{createDate},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pay_config SET 	
+			pay_merchant = #{payMerchant},
+			pay_type = #{payType},
+			app_id = #{appId},
+			app_secret = #{appSecret},
+			mch_id = #{mchId},
+			`key` = #{key},
+			item_no = #{itemNo},
+			bank_id = #{bankId},
+			req_url = #{reqUrl},
+			pay_url = #{payUrl},
+			sign_url = #{signUrl},
+			weixin_callback_domain = #{weixinCallbackDomain},
+			async_notify_url = #{asyncNotifyUrl},
+			sync_notify_url = #{syncNotifyUrl},
+			draw_async_notify_url = #{drawAsyncNotifyUrl},
+			draw_sync_notify_url = #{drawSyncNotifyUrl},
+			callback_domain = #{callbackDomain},
+			order_prefix = #{orderPrefix},
+			use_flag = #{useFlag},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE pay_config SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
