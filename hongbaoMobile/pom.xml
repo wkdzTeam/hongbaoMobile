@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.hongbao.mobile</groupId>
-	<artifactId>hongbaoMobile_</artifactId>
+	<artifactId>hongbao</artifactId>
 	<version>1.0.0</version>
 	<packaging>war</packaging>
 
-	<name>hongbaoMobile</name>
+	<name>hongbao</name>
 	<url>http://www.hongbao.com</url>
 	<inceptionYear>2015</inceptionYear>
 
