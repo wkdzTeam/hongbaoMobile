@@ -72,6 +72,8 @@ public class WebController extends BaseController {
 			//获取登录用户
 			UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
 			
+			logger.info("============userInfo:{}=======",userInfo);
+			
 			//判断是否存在openid2
 			if(StringUtils.isBlank(userInfo.getOpenId2())) {
 	            //跳转openid2登录
@@ -324,7 +326,9 @@ public class WebController extends BaseController {
 			request.getSession().removeAttribute("oldUrl");
 			return "redirect:"+oldUrl;
 		}
-		
+		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
+		logger.info("userInfo:{}",userInfo);
+		model.addAttribute("userInfo", userInfo);
 		return "redirect:/draw/index";
 	}
 	
@@ -355,8 +359,9 @@ public class WebController extends BaseController {
 			//UserInfo userInfo = userInfoService.get("fe54ddbbf58746df85742dad5d2637e0");
 			//UserInfo userInfo = userInfoService.get("42f2e45b3e6e436e96a62775fb6e306f");
 			//request.getSession().setAttribute("userInfo",z userInfo);
-			UserInfo userInfo = userInfoService.get("12312465465797899");
-			request.getSession().setAttribute("userInfo", userInfo);
+//			UserInfo userInfo = userInfoService.get("12312465465797899");
+//			request.getSession().setAttribute("userInfo", userInfo);
+			
 			if(request.getSession().getAttribute("userInfo")!=null) {
 				return "redirect:/draw/index";
 			}

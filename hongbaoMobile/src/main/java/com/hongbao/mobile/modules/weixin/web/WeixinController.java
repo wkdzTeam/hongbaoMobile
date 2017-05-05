@@ -24,6 +24,7 @@ import com.hongbao.mobile.common.exception.HongbaoException;
 import com.hongbao.mobile.common.utils.IdGen;
 import com.hongbao.mobile.common.utils.IpUtils;
 import com.hongbao.mobile.common.utils.JedisUtils;
+import com.hongbao.mobile.common.utils.UUIDGenerator;
 import com.hongbao.mobile.common.web.BaseController;
 import com.hongbao.mobile.modules.pay.entity.PayConfig;
 import com.hongbao.mobile.modules.pay.util.PayUtil;
@@ -116,13 +117,16 @@ public class WeixinController extends BaseController {
 			if(object_oldUrl != null && object_oldUrl.toString().length()>0){
 				oldUrl = object_oldUrl.toString();
 			}
-            
+			
             //首次登陆
             if(userInfo==null) {
+            	LOGGER.info("==============进入用户信息插入逻辑=============");
             	//生成用户id
             	String userId = IdGen.uuid();
             	//生成用户编号
-            	String userNo = userInfoService.makeUserNo();
+//            	String userNo = userInfoService.makeUserNo();
+            	String userNo = UUIDGenerator.generate();
+            	LOGGER.info("==============userId:{},userNo:[{}===========",userId,userNo);
             	//设置用户信息
             	userInfo = new UserInfo();
             	userInfo.setId(userId);//用户id
@@ -145,9 +149,9 @@ public class WeixinController extends BaseController {
             //更新用户信息
             else {
 //        		//设置用户信息
-//            	userInfo.setLastLoginIp(IpUtils.getRequestIp(request));//最后登录ip
-//        		userInfo.setLastLoginTime(System.currentTimeMillis());//最后登录时间
-//        		userInfoService.updateLogin(userInfo);
+            	userInfo.setLastLoginIp(IpUtils.getRequestIp(request));//最后登录ip
+        		userInfo.setLastLoginTime(System.currentTimeMillis());//最后登录时间
+        		userInfoService.updateLogin(userInfo);
             }
             //添加用户session
             request.getSession().setAttribute("userInfo", userInfo);
@@ -164,7 +168,9 @@ public class WeixinController extends BaseController {
             redirectAttributes.addAttribute("keyRedirect", PermissionsUtils.makeUserIdKey(userInfo.getUserNo(),nonce));
             //旧地址
             redirectAttributes.addAttribute("oldUrlRedirect", oldUrl);
-
+            
+            redirectAttributes.addAttribute("userInfo", userInfo);
+            logger.info("=========userInfo:{}===========",userInfo);
             //跳转首页
             return "redirect:"+url;
            
