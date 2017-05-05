@@ -68,7 +68,8 @@ public class Hongbao {
 	 * @return
 	 */
 	public static String getDomain() {
-		return getDomainPrefix()+"."+getDomainSuffix();
+//		return getDomainPrefix()+"."+getDomainSuffix();
+		return "www.zelepa.cn/hongbao";
 	}
 	
 	/**

@@ -72,11 +72,11 @@ public class WebController extends BaseController {
 			//获取登录用户
 			UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
 			
-//			//判断是否存在openid2
-//			if(StringUtils.isBlank(userInfo.getOpenId2())) {
-//	            //跳转openid2登录
-//	            return "redirect:/weixin/toGetOpenIdOther";
-//			}
+			//判断是否存在openid2
+			if(StringUtils.isBlank(userInfo.getOpenId2())) {
+	            //跳转openid2登录
+	            return "redirect:/weixin/toGetOpenIdOther";
+			}
 			
 			//TODO  黑名单拦截
 			String userNo = userInfo.getUserNo();

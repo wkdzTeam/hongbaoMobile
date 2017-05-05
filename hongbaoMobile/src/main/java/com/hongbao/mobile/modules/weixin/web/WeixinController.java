@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,7 +65,9 @@ public class WeixinController extends BaseController {
 	 * 线程池
 	 */
     private ExecutorService threadPool = Executors.newFixedThreadPool(30);
-	
+    
+    
+    private static Logger LOGGER = LoggerFactory.getLogger(WeixinController.class);
 	/**
 	 * 微信oauth登录回调
 	 * @Title oauth
@@ -192,11 +196,11 @@ public class WeixinController extends BaseController {
 			//获取微信跳转域名
 			String domain = WeixinUtil.getDomain();
 			//拼接回调url
-			String serviceUrl = URLEncoder.encode("http://" + domain + "/weixin/oauthOther?userId="+userInfoSession.getId(), "UTF-8");
+			String serviceUrl = URLEncoder.encode("http://" + domain + "/hongbao/weixin/oauthOther?userId="+userInfoSession.getId(), "UTF-8");
 			//拼接微信登录url
 			StringBuilder oauthUrl = new StringBuilder();
 			oauthUrl.append("https://open.weixin.qq.com/connect/oauth2/authorize?");  
-	        oauthUrl.append("appid=").append("wx040740d2bfe59c0b");  
+	        oauthUrl.append("appid=").append("wx79f94418897ba79a");  
 	        oauthUrl.append("&redirect_uri=").append(serviceUrl);
 	        oauthUrl.append("&response_type=code");
 	        oauthUrl.append("&scope=snsapi_base");
@@ -234,11 +238,14 @@ public class WeixinController extends BaseController {
         String domain = Hongbao.getDomain();
         String url = "http://"+domain;
 		try {
-			JSONObject jobj = WeixinUtil.getOauthAccessToken(code,"wx040740d2bfe59c0b","0134babf72f9a4413682a70ed5202051");
+			JSONObject jobj = WeixinUtil.getOauthAccessToken(code,"wx79f94418897ba79a","9dd559bf0a1c0be7779dd68b43410460");
 			//获取登录令牌
 			String accessToken = jobj.containsKey("access_token")?jobj.getString("access_token"):"";
 			//获取openid
 			String openid = jobj.containsKey("openid")?jobj.getString("openid"):"";
+			
+			LOGGER.info("=======accessToken:{}===============",accessToken);
+			LOGGER.info("=======openid:{}===============",openid);
 			
 			if(StringUtils.isBlank(accessToken) || StringUtils.isBlank(openid)) {
 				//0011:没有获取到登录信息
@@ -250,6 +257,7 @@ public class WeixinController extends BaseController {
 			
 			userInfoService.updateOpenId2(userInfo);
 			
+			LOGGER.info("=======url{}===============",url);
             //跳转首页
             return "redirect:"+url;
            
