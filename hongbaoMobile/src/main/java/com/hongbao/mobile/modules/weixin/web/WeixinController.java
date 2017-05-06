@@ -154,7 +154,7 @@ public class WeixinController extends BaseController {
         		userInfoService.updateLogin(userInfo);
             }
             //添加用户session
-            request.getSession().setAttribute("userInfo", userInfo);
+            //request.getSession().setAttribute("userInfo", userInfo);
             //设置渠道信息
             redirectAttributes.addAttribute("channelRedirect", channel);
             //设置父类用户id
@@ -169,8 +169,9 @@ public class WeixinController extends BaseController {
             //旧地址
             redirectAttributes.addAttribute("oldUrlRedirect", oldUrl);
             
-            redirectAttributes.addAttribute("userInfo", userInfo);
-            logger.info("=========userInfo:{}===========",userInfo);
+            model.addAttribute(userInfo);
+            UserInfo userInfoEmp = (UserInfo)request.getSession().getAttribute("userInfo");
+            logger.info("=========userInfoEmp:{}===========",userInfoEmp);
             //跳转首页
             return "redirect:"+url;
            
@@ -197,6 +198,8 @@ public class WeixinController extends BaseController {
 	@RequestMapping(value = "toGetOpenIdOther")
 	public String toGetOpenIdOther(HttpServletRequest request,RedirectAttributes redirectAttributes) {
 		try {
+			
+			logger.info("=====进入toGetOpenIdOther方法=========");
 			UserInfo userInfoSession = (UserInfo)request.getSession().getAttribute("userInfo");
 			
 			//获取微信跳转域名

@@ -75,10 +75,10 @@ public class WebController extends BaseController {
 			logger.info("============userInfo:{}=======",userInfo);
 			
 			//判断是否存在openid2
-			if(StringUtils.isBlank(userInfo.getOpenId2())) {
+			//if(StringUtils.isBlank(userInfo.getOpenId2())) {
 	            //跳转openid2登录
-	            return "redirect:/weixin/toGetOpenIdOther";
-			}
+	        //    return "redirect:/weixin/toGetOpenIdOther";
+			//}
 			
 			//TODO  黑名单拦截
 			String userNo = userInfo.getUserNo();
@@ -316,7 +316,7 @@ public class WebController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "jump")
-	public String jump(HttpServletRequest request,Model model) {
+	public String jump(UserInfo userInfo,HttpServletRequest request,Model model) {
 		String oldUrl = "";
 		Object object_oldUrl = request.getSession().getAttribute("oldUrl");
 		if(object_oldUrl != null && object_oldUrl.toString().length()>0){
@@ -326,9 +326,10 @@ public class WebController extends BaseController {
 			request.getSession().removeAttribute("oldUrl");
 			return "redirect:"+oldUrl;
 		}
-		UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userInfo");
+		//UserInfo userInfo = (UserInfo)request.getAttribute("userInfo");
 		logger.info("userInfo:{}",userInfo);
 		model.addAttribute("userInfo", userInfo);
+		request.getSession().setAttribute("userInfo", userInfo);
 		return "redirect:/draw/index";
 	}
 	
