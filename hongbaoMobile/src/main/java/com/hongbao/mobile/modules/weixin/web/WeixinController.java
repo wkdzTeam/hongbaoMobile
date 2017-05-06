@@ -149,12 +149,13 @@ public class WeixinController extends BaseController {
             //更新用户信息
             else {
 //        		//设置用户信息
-            	userInfo.setLastLoginIp(IpUtils.getRequestIp(request));//最后登录ip
-        		userInfo.setLastLoginTime(System.currentTimeMillis());//最后登录时间
-        		userInfoService.updateLogin(userInfo);
+            	//userInfo.setLastLoginIp(IpUtils.getRequestIp(request));//最后登录ip
+        		//userInfo.setLastLoginTime(System.currentTimeMillis());//最后登录时间
+        		//userInfoService.updateLogin(userInfo);
             }
             //添加用户session
-            //request.getSession().setAttribute("userInfo", userInfo);
+            request.getSession().setAttribute("userInfo", userInfo);
+            logger.info("===============oauth中userInfo:{}",userInfo);
             //设置渠道信息
             redirectAttributes.addAttribute("channelRedirect", channel);
             //设置父类用户id
@@ -169,11 +170,9 @@ public class WeixinController extends BaseController {
             //旧地址
             redirectAttributes.addAttribute("oldUrlRedirect", oldUrl);
             
-            model.addAttribute(userInfo);
-            UserInfo userInfoEmp = (UserInfo)request.getSession().getAttribute("userInfo");
-            logger.info("=========userInfoEmp:{}===========",userInfoEmp);
+            
             //跳转首页
-            return "redirect:"+url;
+            return "redirect:/jump";
            
 		} catch (HongbaoException hongbao) {
 			//捕获业务异常
